@@ -1,0 +1,7 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_PASSWORD: landstack
+      POSTGRES_DB: landstack
+    ports: ["5432:5432"]
