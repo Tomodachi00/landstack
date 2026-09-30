@@ -9,4 +9,13 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: landstack-db
+          property: connectionString
+
+databases:
+  - name: landstack-db
+    databaseName: landstack
+    user: landstack
+    plan: free
+    region: singapore
