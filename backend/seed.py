@@ -1,7 +1,9 @@
+import os
 import random, psycopg2
 from shapely.geometry import box
 
-conn = psycopg2.connect("postgresql://postgres:landstack@localhost:5432/landstack")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:landstack@localhost:5432/landstack")
+conn = psycopg2.connect(DATABASE_URL)
 cur = conn.cursor()
 
 NAMES = ["Rajesh Kumar", "Sunita Devi", "Harpreet Singh", "Meena Sharma", "Anil Verma"]

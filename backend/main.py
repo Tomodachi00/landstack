@@ -1,13 +1,15 @@
 import json
+import os
 import psycopg2, psycopg2.extras
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:landstack@localhost:5432/landstack")
 
 def q(sql, params=None):
-    conn = psycopg2.connect("postgresql://postgres:landstack@localhost:5432/landstack")
+    conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute(sql, params or ())
     rows = cur.fetchall()
