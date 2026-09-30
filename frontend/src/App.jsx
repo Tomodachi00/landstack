@@ -16,6 +16,7 @@ const zoneColors = {
   GREEN: "#70a37f",
   AGRI: "#b7d968",
 };
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
 export default function App() {
   const mapEl = useRef(null);
@@ -32,7 +33,7 @@ export default function App() {
     attribution: "&copy; OpenStreetMap contributors",
   }).addTo(map);
 
-  fetch("http://localhost:8000/parcels/bbox?minx=76.775&miny=30.730&maxx=76.790&maxy=30.740")
+  fetch(`${API_BASE}/parcels/bbox?minx=76.775&miny=30.730&maxx=76.790&maxy=30.740`)
     .then((r) => r.json())
     .then((geojson) => {
       if (cancelled) return;   // map was already torn down, do nothing
@@ -46,7 +47,7 @@ export default function App() {
         onEachFeature: (feature, layer) => {
           layer.on("click", () => {
             const ulpin = feature.properties.ulpin;
-            fetch(`http://localhost:8000/parcels/${ulpin}`)
+            fetch(`${API_BASE}/parcels/${ulpin}`)
               .then((r) => r.json())
               .then(setSelected);
           });

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: landstack
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: landstack-db
+          property: connectionString
+
+databases:
+  - name: landstack-db
+    databaseName: landstack
+    user: landstack
+    plan: free
+    region: oregon

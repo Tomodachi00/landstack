@@ -1,8 +1,10 @@
 import json
 import os
+from pathlib import Path
 import psycopg2, psycopg2.extras
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -40,3 +42,11 @@ def parcel_detail(ulpin: str):
     enc = q("SELECT kind FROM encumbrance WHERE ulpin = %s AND active", (ulpin,))
     dis = q("SELECT status FROM dispute WHERE ulpin = %s AND status = 'PENDING'", (ulpin,))
     return {"ulpin": ulpin, "owners": owner, "zone": zone, "encumbrances": enc, "disputes": dis}
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+static_dir = Path(__file__).parent / "static"
+if static_dir.is_dir():
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="frontend")
